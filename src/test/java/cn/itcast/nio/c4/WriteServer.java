@@ -12,11 +12,13 @@ import java.util.Iterator;
 
 public class WriteServer {
     public static void main(String[] args) throws IOException {
+        Selector selector = Selector.open();
+
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.configureBlocking(false);
-        Selector selector = Selector.open();
         ssc.register(selector, SelectionKey.OP_ACCEPT);
-        ssc.bind(new InetSocketAddress(8080));
+        ssc.bind(new InetSocketAddress(8086));
+
         while (true) {
             selector.select();
             Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
@@ -28,9 +30,10 @@ public class WriteServer {
                     sc.configureBlocking(false);
                     SelectionKey sckey = sc.register(selector, 0, null);
                     sckey.interestOps(SelectionKey.OP_READ);
+
                     // 1. 向客户端发送大量数据
                     StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < 5000000; i++) {
+                    for (int i = 0; i < 500000; i++) {
                         sb.append("a");
                     }
                     ByteBuffer buffer = Charset.defaultCharset().encode(sb.toString());

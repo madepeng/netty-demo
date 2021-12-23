@@ -11,6 +11,6 @@ public class Client {
         sc.connect(new InetSocketAddress("localhost", 8086));
         SocketAddress address = sc.getLocalAddress();
         System.out.println("waiting...");
-//        sc.close();
+        sc.close();
     }
 }
