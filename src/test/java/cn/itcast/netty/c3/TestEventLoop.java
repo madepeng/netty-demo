@@ -4,8 +4,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.TimeUnit;
-
 @Slf4j
 public class TestEventLoop {
     public static void main(String[] args) {
@@ -19,19 +17,27 @@ public class TestEventLoop {
         System.out.println(group.next());
 
         // 3. 执行普通任务
-        /*group.next().execute(() -> {
+        group.next().execute(() -> {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             log.debug("ok");
-        });*/
+        });
 
-        // 4. 执行定时任务
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            log.debug("ok");
+        }, "test-thread").start();
+        /*// 4. 执行定时任务
         group.next().scheduleAtFixedRate(() -> {
             log.debug("ok");
-        }, 0, 1, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.SECONDS);*/
 
         log.debug("main");
     }

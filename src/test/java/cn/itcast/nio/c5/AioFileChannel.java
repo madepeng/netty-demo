@@ -14,12 +14,12 @@ import static cn.itcast.nio.c2.ByteBufferUtil.debugAll;
 @Slf4j
 public class AioFileChannel {
     public static void main(String[] args) throws IOException {
-        try (AsynchronousFileChannel channel = AsynchronousFileChannel.open(Paths.get("data.txt"), StandardOpenOption.READ)) {
+        try (AsynchronousFileChannel channel = AsynchronousFileChannel.open(Paths.get("/Users/madepeng/hongen/code/study/netty-demo/src/data.txt"), StandardOpenOption.READ)) {
             // 参数1 ByteBuffer
             // 参数2 读取的起始位置
             // 参数3 附件
             // 参数4 回调对象 CompletionHandler
-            ByteBuffer buffer = ByteBuffer.allocate(16);
+            ByteBuffer buffer = ByteBuffer.allocate(4);
             log.debug("read begin...");
             channel.read(buffer, 0, buffer, new CompletionHandler<Integer, ByteBuffer>() {
                 @Override // read 成功
@@ -28,15 +28,17 @@ public class AioFileChannel {
                     attachment.flip();
                     debugAll(attachment);
                 }
+
                 @Override // read 失败
                 public void failed(Throwable exc, ByteBuffer attachment) {
                     exc.printStackTrace();
                 }
             });
             log.debug("read end...");
+            System.in.read();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.in.read();
     }
 }

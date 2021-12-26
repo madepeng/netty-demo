@@ -18,16 +18,17 @@ import static cn.itcast.nio.c2.ByteBufferUtil.debugAll;
 public class MultiThreadServer {
     public static void main(String[] args) throws IOException {
         Thread.currentThread().setName("boss");
+        Selector boss = Selector.open();
 
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.configureBlocking(false);
-        Selector boss = Selector.open();
         SelectionKey bossKey = ssc.register(boss, 0, null);
         bossKey.interestOps(SelectionKey.OP_ACCEPT);
-        ssc.bind(new InetSocketAddress(8080));
+        ssc.bind(new InetSocketAddress(8086));
 
         // 1. 创建固定数量的 worker 并初始化
-        Worker[] workers = new Worker[Runtime.getRuntime().availableProcessors()];
+//        Worker[] workers = new Worker[Runtime.getRuntime().availableProcessors()];
+        Worker[] workers = new Worker[4];
         for (int i = 0; i < workers.length; i++) {
             workers[i] = new Worker("worker-" + i);
         }
@@ -71,7 +72,9 @@ public class MultiThreadServer {
                 thread.start();
                 start = true;
             }
+            log.info("before wakeup");
             selector.wakeup(); // 唤醒 select 方法 boss
+            log.info("after wakeup");
             sc.register(selector, SelectionKey.OP_READ, null); // boss
         }
 
@@ -79,6 +82,7 @@ public class MultiThreadServer {
         public void run() {
             while (true) {
                 try {
+                    log.info(name + " worker start");
                     selector.select(); // worker-0  阻塞
                     Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
                     while (iter.hasNext()) {
@@ -91,6 +95,7 @@ public class MultiThreadServer {
                             channel.read(buffer);
                             buffer.flip();
                             debugAll(buffer);
+//                            System.out.println(StandardCharsets.UTF_8.decode(buffer));
                         }
                     }
                 } catch (IOException e) {
