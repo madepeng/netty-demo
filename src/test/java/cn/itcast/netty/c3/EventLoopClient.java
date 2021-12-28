@@ -15,6 +15,7 @@ import java.net.InetSocketAddress;
 @Slf4j
 public class EventLoopClient {
     public static void main(String[] args) throws InterruptedException {
+        log.info("start");
         // 2. 带有 Future，Promise 的类型都是和异步方法配套使用，用来处理结果
         ChannelFuture channelFuture = new Bootstrap()
                 .group(new NioEventLoopGroup())
@@ -27,7 +28,7 @@ public class EventLoopClient {
                 })
                 // 1. 连接到服务器
                 // 异步非阻塞, main 发起了调用，真正执行 connect 是 nio 线程
-                .connect(new InetSocketAddress("localhost", 8080)); // 1s 秒后
+                .connect(new InetSocketAddress("localhost", 8086)); // 1s 秒后
 
         // 2.1 使用 sync 方法同步处理结果
         /*channelFuture.sync(); // 阻塞住当前线程，直到nio线程连接建立完毕
@@ -41,8 +42,9 @@ public class EventLoopClient {
             // 在 nio 线程连接建立好之后，会调用 operationComplete
             public void operationComplete(ChannelFuture future) throws Exception {
                 Channel channel = future.channel();
-                log.debug("{}", channel);
+                log.debug("channel：{}", channel);
                 channel.writeAndFlush("hello, world");
+                log.info("end");
             }
         });
     }

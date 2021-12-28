@@ -43,7 +43,7 @@ public class Client1 {
                     });
                 }
             });
-            ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8080).sync();
+            ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8086).sync();
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.error("client error", e);

@@ -22,11 +22,14 @@ public class TestSlice {
 
         System.out.println("释放原有 byteBuf 内存");
         buf.release();
+        log(buf);
         log(f1);
 
 
         f1.release();
         f2.release();
+        log(buf);
+
         /*System.out.println("========================");
         f1.setByte(0, 'b');
         log(f1);

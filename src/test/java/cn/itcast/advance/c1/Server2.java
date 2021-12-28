@@ -33,7 +33,7 @@ public class Server2 {
                     ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                 }
             });
-            ChannelFuture channelFuture = serverBootstrap.bind(8080).sync();
+            ChannelFuture channelFuture = serverBootstrap.bind(8086).sync();
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.error("server error", e);

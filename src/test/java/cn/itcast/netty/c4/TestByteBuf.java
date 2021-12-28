@@ -30,6 +30,6 @@ public class TestByteBuf {
                 .append(" capacity:").append(buffer.capacity())
                 .append(NEWLINE);
         appendPrettyHexDump(buf, buffer);
-        System.out.println(buf.toString());
+        System.out.println(buf);
     }
 }

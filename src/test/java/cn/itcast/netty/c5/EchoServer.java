@@ -8,9 +8,11 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
 
+@Slf4j
 public class EchoServer {
     public static void main(String[] args) {
         new ServerBootstrap()
@@ -19,11 +21,11 @@ public class EchoServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new ChannelInboundHandlerAdapter(){
+                        ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) {
                                 ByteBuf buffer = (ByteBuf) msg;
-                                System.out.println(buffer.toString(Charset.defaultCharset()));
+                                log.info("{}", buffer.toString(Charset.defaultCharset()));
 
                                 // 建议使用 ctx.alloc() 创建 ByteBuf
                                 ByteBuf response = ctx.alloc().buffer();
@@ -35,6 +37,6 @@ public class EchoServer {
                             }
                         });
                     }
-                }).bind(8080);
+                }).bind(8086);
     }
 }

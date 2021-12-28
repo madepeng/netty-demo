@@ -41,7 +41,7 @@ public class TestEmbeddedChannel {
         };
         EmbeddedChannel channel = new EmbeddedChannel(h1, h2, h3, h4);
         // 模拟入站操作
-//        channel.writeInbound(ByteBufAllocator.DEFAULT.buffer().writeBytes("hello".getBytes()));
+        channel.writeInbound(ByteBufAllocator.DEFAULT.buffer().writeBytes("hello".getBytes()));
         // 模拟出站操作
         channel.writeOutbound(ByteBufAllocator.DEFAULT.buffer().writeBytes("world".getBytes()));
 

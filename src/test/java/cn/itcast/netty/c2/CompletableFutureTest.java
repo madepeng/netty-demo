@@ -16,34 +16,60 @@ import java.util.concurrent.ExecutionException;
 public class CompletableFutureTest {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             log.info("supplyAsync:{}", "test");
             return "test";
         });
 
-        CompletableFuture<String> stringCompletableFuture1 = completableFuture.thenApply(s -> {
+        completableFuture.thenApply(s -> {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             log.info("thenApply:{}", s + "thenapply");
             return s + "thenapply";
         });
-        CompletableFuture<String> stringCompletableFuture2 = completableFuture.thenApplyAsync(s -> {
+
+        completableFuture.thenApplyAsync(s -> {
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            log.info("thenApplyAsync:{}", s + "thenapply");
+            log.info("thenApplyAsync:{}", s + "thenapply1");
             return s + "thenapply";
         });
-//        completableFuture.cancel(true);
+
+        CompletableFuture<String> stringCompletableFuture2 = completableFuture.thenApplyAsync(s -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            log.info("thenApplyAsync:{}", s + "thenapply2");
+            return s + "thenapply";
+        });
+
+        stringCompletableFuture2.thenApplyAsync(s -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            log.info("thenApplyAsync:{}", s + "stringCompletableFuture2 thenapply");
+            return s + "thenapply again";
+        });
+
+        stringCompletableFuture2.thenApplyAsync(s -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            log.info("thenApplyAsync:{}", s + "stringCompletableFuture2 thenapply again");
+            return s + "thenapply again";
+        });
+
         CompletableFuture<String> stringCompletableFuture = completableFuture.whenComplete((s, throwable) -> {
             try {
                 Thread.sleep(1000);
@@ -53,7 +79,7 @@ public class CompletableFutureTest {
             log.info("whenCompleteAsync:{}", s);
         });
         log.info("completableFuture.getNumberOfDependents():{}", completableFuture.getNumberOfDependents());
-//        log.info("completableFuture:{}", completableFuture.get());
+
 
         Thread.currentThread().join();
     }

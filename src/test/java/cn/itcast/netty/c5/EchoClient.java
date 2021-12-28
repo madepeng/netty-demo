@@ -9,10 +9,12 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringEncoder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
 import java.util.Scanner;
 
+@Slf4j
 public class EchoClient {
     public static void main(String[] args) throws InterruptedException {
         NioEventLoopGroup group = new NioEventLoopGroup();
@@ -27,13 +29,13 @@ public class EchoClient {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                 ByteBuf buffer = (ByteBuf) msg;
-                                System.out.println(buffer.toString(Charset.defaultCharset()));
+                                log.info("{}", buffer.toString(Charset.defaultCharset()));
 
                                 // 思考：需要释放 buffer 吗
                             }
                         });
                     }
-                }).connect("127.0.0.1", 8080).sync().channel();
+                }).connect("127.0.0.1", 8086).sync().channel();
         channel.closeFuture().addListener(future -> {
             group.shutdownGracefully();
         });
