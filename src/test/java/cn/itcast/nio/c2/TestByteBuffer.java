@@ -14,22 +14,20 @@ public class TestByteBuffer {
         // FileChannel
         // 1. 输入输出流， 2. RandomAccessFile
         try (FileChannel channel = new FileInputStream("/Users/madepeng/hongen/code/study/netty-demo/src/data.txt").getChannel()) {
-            // 准备缓冲区
-            ByteBuffer buffer = ByteBuffer.allocate(6);
-            while(true) {
-                // 从 channel 读取数据，向 buffer 写入
-                int len = channel.read(buffer);
-                log.debug("读取到的字节数 {}", len);
-                if(len == -1) { // 没有内容了
-                    break;
+            ByteBuffer byteBuffer = ByteBuffer.allocate(20);
+            while (true) {
+                int read = channel.read(byteBuffer);
+                log.info("read size:{}", read);
+                if (read == -1) {
+                    log.info("read over");
+                    return;
                 }
-                // 打印 buffer 的内容
-                buffer.flip(); // 切换至读模式
-                while(buffer.hasRemaining()) { // 是否还有剩余未读数据
-                    byte b = buffer.get();
-                    log.debug("实际字节 {}", (char) b);
+                byteBuffer.flip();
+                while (byteBuffer.hasRemaining()) {
+                    byte b = byteBuffer.get();
+                    log.info("read byte is :{}", (char) b);
                 }
-                buffer.clear(); // 切换为写模式
+                byteBuffer.clear();
             }
         } catch (IOException e) {
             e.printStackTrace();

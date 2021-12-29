@@ -54,5 +54,11 @@ public class ByteTest {
         System.out.println(g);
         System.out.println(m);
         System.out.println(n);
+        System.out.println();
+        System.out.println(0x2b);
+        System.out.println(0x4f);
+        System.out.println(0x4b);
+        System.out.println(0x0d);
+        System.out.println(0x0a);
     }
 }
