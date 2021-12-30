@@ -12,8 +12,6 @@ import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
@@ -29,8 +27,8 @@ public class TestHttp {
             serverBootstrap.group(boss, worker);
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
-                protected void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
+                protected void initChannel(SocketChannel ch) {
+//                    ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     ch.pipeline().addLast(new HttpServerCodec());
                     ch.pipeline().addLast(new SimpleChannelInboundHandler<HttpRequest>() {
                         @Override
@@ -65,7 +63,7 @@ public class TestHttp {
                     });*/
                 }
             });
-            ChannelFuture channelFuture = serverBootstrap.bind(8080).sync();
+            ChannelFuture channelFuture = serverBootstrap.bind(8086).sync();
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.error("server error", e);

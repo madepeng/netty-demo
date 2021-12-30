@@ -18,12 +18,11 @@ import static cn.itcast.nio.c2.ByteBufferUtil.debugAll;
 public class MultiThreadServer {
     public static void main(String[] args) throws IOException {
         Thread.currentThread().setName("boss");
-        Selector boss = Selector.open();
 
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.configureBlocking(false);
-        SelectionKey bossKey = ssc.register(boss, 0, null);
-        bossKey.interestOps(SelectionKey.OP_ACCEPT);
+        Selector boss = Selector.open();
+        ssc.register(boss, SelectionKey.OP_ACCEPT, null);
         ssc.bind(new InetSocketAddress(8086));
 
         // 1. 创建固定数量的 worker 并初始化

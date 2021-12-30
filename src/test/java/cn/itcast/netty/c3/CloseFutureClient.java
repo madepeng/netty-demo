@@ -33,7 +33,7 @@ public class CloseFutureClient {
         System.out.println(channelFuture.getClass());
         Channel channel = channelFuture.sync().channel();
         log.debug("{}", channel);
-        new Thread(()->{
+        new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (true) {
                 String line = scanner.nextLine();
@@ -54,6 +54,7 @@ public class CloseFutureClient {
         System.out.println(closeFuture.getClass());
         closeFuture.addListener((ChannelFutureListener) future -> {
             log.debug("处理关闭之后的操作");
+            System.out.println(future.channel());
             group.shutdownGracefully();
         });
     }

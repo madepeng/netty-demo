@@ -29,7 +29,7 @@ public class EchoClient {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                                 ByteBuf buffer = (ByteBuf) msg;
-                                log.info("{}", buffer.toString(Charset.defaultCharset()));
+                                log.info("msg:{}", buffer.toString(Charset.defaultCharset()));
 
                                 // 思考：需要释放 buffer 吗
                             }

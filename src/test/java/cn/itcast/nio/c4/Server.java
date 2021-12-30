@@ -10,11 +10,11 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-
-import static cn.itcast.nio.c2.ByteBufferUtil.debugAll;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class Server {
+    static AtomicInteger count = new AtomicInteger(0);
 
     public static void main(String[] args) throws IOException {
 
@@ -33,6 +33,7 @@ public class Server {
 
 
         while (true) {
+            log.info("loop count:{}", count.incrementAndGet());
             // 3. select 方法, 没有事件发生，线程阻塞，有事件，线程才会恢复运行
             // select 在事件未处理时，它不会阻塞, 事件发生后要么处理，要么取消，不能置之不理
             int select = selector.select();
@@ -62,7 +63,7 @@ public class Server {
                             key.cancel();
                         } else {
                             buffer.flip();
-                            debugAll(buffer);
+//                            debugAll(buffer);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

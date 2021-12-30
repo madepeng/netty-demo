@@ -13,10 +13,14 @@ public class WriteClient {
         // 3. 接收数据
         int count = 0;
         while (true) {
-            ByteBuffer buffer = ByteBuffer.allocate(1024 * 1024);
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
             count += sc.read(buffer);
             System.out.println(count);
+//            debugAll(buffer);
             buffer.clear();
+            /*if (count == 500000){
+                break;
+            }*/
         }
     }
 }

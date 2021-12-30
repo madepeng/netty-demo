@@ -9,16 +9,15 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Client1 {
-    static final Logger log = LoggerFactory.getLogger(Client1.class);
 
     public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            send();
-        }
+//        for (int i = 0; i < 10; i++) {
+        send();
+//        }
         System.out.println("finish");
     }
 
@@ -35,16 +34,20 @@ public class Client1 {
                         // 会在连接 channel 建立成功后，会触发 active 事件
                         @Override
                         public void channelActive(ChannelHandlerContext ctx) {
+//                            for (int i = 0; i < 10; i++) {
                             ByteBuf buf = ctx.alloc().buffer(16);
-                            buf.writeBytes(new byte[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17});
+                            for (int i = 0; i < 10; i++) {
+                                buf.writeBytes(new byte[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17});
+                            }
                             ctx.writeAndFlush(buf);
-                            ctx.channel().close();
+//                            }
+//                            ctx.channel().close();
                         }
                     });
                 }
             });
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8086).sync();
-            channelFuture.channel().closeFuture().sync();
+//            channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.error("client error", e);
         } finally {

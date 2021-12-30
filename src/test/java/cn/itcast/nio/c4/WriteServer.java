@@ -1,5 +1,7 @@
 package cn.itcast.nio.c4;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -9,17 +11,23 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 public class WriteServer {
+    static AtomicInteger count = new AtomicInteger(0);
+
     public static void main(String[] args) throws IOException {
-        Selector selector = Selector.open();
 
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.configureBlocking(false);
+
+        Selector selector = Selector.open();
         ssc.register(selector, SelectionKey.OP_ACCEPT);
         ssc.bind(new InetSocketAddress(8086));
 
         while (true) {
+            log.info("count:{}", count.incrementAndGet());
             selector.select();
             Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
             while (iter.hasNext()) {
@@ -28,8 +36,7 @@ public class WriteServer {
                 if (key.isAcceptable()) {
                     SocketChannel sc = ssc.accept();
                     sc.configureBlocking(false);
-                    SelectionKey sckey = sc.register(selector, 0, null);
-                    sckey.interestOps(SelectionKey.OP_READ);
+                    SelectionKey sckey = sc.register(selector, SelectionKey.OP_READ, null);
 
                     // 1. 向客户端发送大量数据
                     StringBuilder sb = new StringBuilder();
@@ -40,7 +47,7 @@ public class WriteServer {
 
                     // 2. 返回值代表实际写入的字节数
                     int write = sc.write(buffer);
-                    System.out.println(write);
+                    log.info("isAcceptable write:{}", write);
 
                     // 3. 判断是否有剩余内容
                     if (buffer.hasRemaining()) {
@@ -53,8 +60,9 @@ public class WriteServer {
                 } else if (key.isWritable()) {
                     ByteBuffer buffer = (ByteBuffer) key.attachment();
                     SocketChannel sc = (SocketChannel) key.channel();
+                    log.info("isWritable sc:{}", sc);
                     int write = sc.write(buffer);
-                    System.out.println(write);
+                    log.info("isWritable write:{}", write);
                     // 6. 清理操作
                     if (!buffer.hasRemaining()) {
                         key.attach(null); // 需要清除buffer

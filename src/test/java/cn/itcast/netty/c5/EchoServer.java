@@ -25,7 +25,7 @@ public class EchoServer {
                             @Override
                             public void channelRead(ChannelHandlerContext ctx, Object msg) {
                                 ByteBuf buffer = (ByteBuf) msg;
-                                log.info("{}", buffer.toString(Charset.defaultCharset()));
+                                log.info("msg:{}", buffer.toString(Charset.defaultCharset()));
 
                                 // 建议使用 ctx.alloc() 创建 ByteBuf
                                 ByteBuf response = ctx.alloc().buffer();

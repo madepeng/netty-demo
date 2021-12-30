@@ -18,17 +18,18 @@ public class TestNettyFuture {
             @Override
             public Integer call() throws Exception {
                 log.debug("执行计算");
-                Thread.sleep(1000);
+                Thread.sleep(2000);
                 return 70;
             }
         });
 //        log.debug("等待结果");
 //        log.debug("结果是 {}", future.get());
-        future.addListener(new GenericFutureListener<Future<? super Integer>>(){
+        future.addListener(new GenericFutureListener<Future<? super Integer>>() {
             @Override
             public void operationComplete(Future<? super Integer> future) throws Exception {
                 log.debug("接收结果:{}", future.getNow());
             }
         });
+        log.info("end");
     }
 }

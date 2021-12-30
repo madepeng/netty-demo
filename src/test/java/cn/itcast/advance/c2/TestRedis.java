@@ -9,7 +9,6 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.Charset;
@@ -36,7 +35,7 @@ public class TestRedis {
             bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) {
-                    ch.pipeline().addLast(new LoggingHandler());
+//                    ch.pipeline().addLast(new LoggingHandler());
                     ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
                         @Override
                         public void channelActive(ChannelHandlerContext ctx) {
@@ -56,12 +55,25 @@ public class TestRedis {
                             buf.writeBytes("zhangsan".getBytes());
                             buf.writeBytes(LINE);
                             ctx.writeAndFlush(buf);
+
+                            ByteBuf buf1 = ctx.alloc().buffer();
+                            buf1.writeBytes("*2".getBytes());
+                            buf1.writeBytes(LINE);
+                            buf1.writeBytes("$3".getBytes());
+                            buf1.writeBytes(LINE);
+                            buf1.writeBytes("get".getBytes());
+                            buf1.writeBytes(LINE);
+                            buf1.writeBytes("$4".getBytes());
+                            buf1.writeBytes(LINE);
+                            buf1.writeBytes("name".getBytes());
+                            buf1.writeBytes(LINE);
+                            ctx.writeAndFlush(buf);
                         }
 
                         @Override
                         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
                             ByteBuf buf = (ByteBuf) msg;
-                            System.out.println(buf.toString(Charset.defaultCharset()));
+                            log.info(buf.toString(Charset.defaultCharset()));
                         }
                     });
                 }
