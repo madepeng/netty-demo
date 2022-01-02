@@ -55,8 +55,8 @@ public class ChatClient {
                             IdleStateEvent event = (IdleStateEvent) evt;
                             // 触发了写空闲事件
                             if (event.state() == IdleState.WRITER_IDLE) {
-//                                log.debug("3s 没有写数据了，发送一个心跳包");
-                                ctx.writeAndFlush(new PingMessage());
+                                log.debug("3s 没有写数据了，发送一个心跳包");
+                                ctx.writeAndFlush("new PingMessage()");
                             }
                         }
                     });*/
@@ -166,7 +166,7 @@ public class ChatClient {
                         // 在出现异常时触发
                         @Override
                         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-                            log.debug("连接已经断开，按任意键退出..{}", cause.getMessage());
+                            log.debug("连接已经异常断开，按任意键退出..{}", cause.getMessage());
                             EXIT.set(true);
                         }
                     });

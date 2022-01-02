@@ -30,6 +30,8 @@ public class ChatServer {
         GroupChatRequestMessageHandler GROUP_CHAT_HANDLER = new GroupChatRequestMessageHandler();
         QuitHandler QUIT_HANDLER = new QuitHandler();
 
+        PingMessageHandler PING_HANDLER = new PingMessageHandler();
+
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.channel(NioServerSocketChannel.class);
@@ -40,6 +42,7 @@ public class ChatServer {
                     ch.pipeline().addLast(new ProcotolFrameDecoder());
                     ch.pipeline().addLast(LOGGING_HANDLER);
                     ch.pipeline().addLast(MESSAGE_CODEC);
+                    ch.pipeline().addLast(PING_HANDLER);
                     // 用来判断是不是 读空闲时间过长，或 写空闲时间过长
                     // 5s 内如果没有收到 channel 的数据，会触发一个 IdleState#READER_IDLE 事件
                     /*ch.pipeline().addLast(new IdleStateHandler(5, 0, 0));

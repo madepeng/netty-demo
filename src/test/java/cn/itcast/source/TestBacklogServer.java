@@ -19,6 +19,6 @@ public class TestBacklogServer {
                     protected void initChannel(NioSocketChannel ch) {
                         ch.pipeline().addLast(new LoggingHandler());
                     }
-                }).bind(8080);
+                }).bind(8086);
     }
 }

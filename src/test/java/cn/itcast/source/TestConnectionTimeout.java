@@ -24,7 +24,7 @@ public class TestConnectionTimeout {
                     .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1000)
                     .channel(NioSocketChannel.class)
                     .handler(new LoggingHandler());
-            ChannelFuture future = bootstrap.connect("127.0.0.1", 8080);
+            ChannelFuture future = bootstrap.connect("127.0.0.1", 8084);
             future.sync().channel().closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();

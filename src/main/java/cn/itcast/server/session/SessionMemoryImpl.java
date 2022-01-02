@@ -41,6 +41,11 @@ public class SessionMemoryImpl implements Session {
     }
 
     @Override
+    public String getUserName(Channel channel) {
+        return channelUsernameMap.get(channel);
+    }
+
+    @Override
     public String toString() {
         return usernameChannelMap.toString();
     }
